@@ -7,11 +7,11 @@ Login = mysql.connector.connect(user="lifechoices", password="@Lifechoices1234",
                                 auth_plugin="mysql_native_password")
 
 mycursor = Login.cursor()
-xy = mycursor.execute("Select * from login_info")
+xy = mycursor.execute("Select * from Admin_login")
 
 obj = {}
 for i in mycursor:
-    rcv = {i[6]: i[7]}
+    rcv = {i[1]: i[2]}
     keys = rcv.keys()
     entries = rcv.values()
 
@@ -20,11 +20,6 @@ for i in mycursor:
             obj[key] = entry
 
 print(obj)
-
-
-def register():
-    root.destroy()
-    import register
 
 
 user_pass = obj
@@ -73,12 +68,13 @@ def verify():
 
 
 root = Tk()
-root.title("Password and username Verification")
+root.title("Admin user Verification")
 root.geometry("500x400")
 root.config(bg='#80b636')
 
 frame = Frame(root, padx=10, pady=10)
 frame.pack(expand=True)
+
 
 lbluser = Label(frame, text="Enter your Username")
 lbluser.grid(row=1, column=1)
@@ -101,7 +97,5 @@ exit_btn.grid(row=5, column=2, pady=5)
 cal_btn = Button(frame, text='Log in', bg='#8dc63f', command=verify, borderwidth=5, width=10)
 cal_btn.grid(row=5, column=1, pady=5)
 
-reg_btn = Button(frame, text='Register', bg='#8dc63f', command=register, borderwidth=5, width=10)
-reg_btn.grid(row=6, column=1, pady=5)
 
 root.mainloop()

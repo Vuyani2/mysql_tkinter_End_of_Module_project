@@ -2,17 +2,17 @@ from tkinter import *
 from tkinter import messagebox
 import mysql.connector
 
-login_info = mysql.connector.connect(user="lifechoices", password="@Lifechoices1234", host="127.0.0.1", database="LS_login",
-                               auth_plugin="mysql_native_password")
+login_info = mysql.connector.connect(user="lifechoices", password="@Lifechoices1234", host="127.0.0.1",
+                                     database="LS_login", auth_plugin="mysql_native_password")
 
 mycursor = login_info.cursor(buffered=True)
-# xy = mycursor.execute("Select*from login_info")
+
 
 def register():
     user_id = IntVar()
     global login_info
     nok_query = "INSERT INTO next_kin(name, phone_number) VALUES(%s, %s);"
-    value= (NOKNameentry.get(), entryNOKPno.get())
+    value = (NOKNameentry.get(), entryNOKPno.get())
     mycursor.execute(nok_query, value)
     login_info.commit()
 
@@ -23,8 +23,10 @@ def register():
         print(i[0])
         user_id = i[0]
 
-    sql = "INSERT INTO login_info(name, surname, ID_number, phone_number, username, password, user_id) VALUES(%s, %s, %s, %s, %s, %s, %s)"
-    val = (nameentry.get(), entrysurname.get(), IDentry.get(), entryPno.get(), userentry.get(), entryuserpass.get(), user_id)
+    sql = "INSERT INTO login_info(name, surname, ID_number, phone_number, username, password, user_id) " \
+          "VALUES(%s, %s, %s, %s, %s, %s, %s)"
+    val = (nameentry.get(), entrysurname.get(), IDentry.get(), entryPno.get(), userentry.get(), entryuserpass.get(),
+           user_id)
     mycursor.execute(sql, val)
     login_info.commit()
 
@@ -34,18 +36,32 @@ def register():
     # import main
 
 
+def exitapplication():
+    msgbox = messagebox.askquestion('Exit Application', 'Are you sure you want to exit the application', icon='warning')
+    if msgbox == 'yes':
+        root.destroy()
+    else:
+        messagebox.showinfo('Return', 'You will now return to the application screen')
+
+
 def clear_entry():
-    pass
+    userentry.delete(0, 'end')
+    nameentry.delete(0, 'end')
+    entrysurname.delete(0, 'end')
+    IDentry.delete(0, 'end')
+    entryPno.delete(0, 'end')
+    NOKNameentry.delete(0, 'end')
+    entryNOKPno.delete(0, 'end')
+    entryuserpass.delete(0, 'end')
+
 
 root = Tk()
 root.title("Registration")
 root.geometry("500x400")
-root.config(bg='black')
+root.config(bg='#80b636')
 
 frame = Frame(root, padx=10, pady=10)
 frame.pack(expand=True)
-
-
 
 lblname = Label(frame, text="Enter your Name")
 lblname.grid(row=1, column=1)
@@ -97,13 +113,13 @@ lbluserpass.grid(row=8, column=1)
 entryuserpass = Entry(frame, )
 entryuserpass.grid(row=8, column=2, pady=5)
 
-reset_btn = Button(frame, text='clear', bg='#8dc63f', command=clear_entry)
+reset_btn = Button(frame, text='clear', bg='#8dc63f', command=clear_entry, borderwidth=5, width=10)
 reset_btn.grid(row=9, column=2, pady=8)
 
-exit_btn = Button(frame, text='Exit', bg='#8dc63f', command=lambda: root.destroy())
+exit_btn = Button(frame, text='Exit', bg='#8dc63f', command=exitapplication, borderwidth=5, width=10)
 exit_btn.grid(row=10, column=2, pady=5)
 
-reg_btn = Button(frame, text='Register', bg='#8dc63f', command=register)
+reg_btn = Button(frame, text='Register', bg='#8dc63f', command=register, borderwidth=5, width=10)
 reg_btn.grid(row=9, column=1, pady=5)
 
 root.mainloop()
