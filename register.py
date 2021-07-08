@@ -5,21 +5,34 @@ import mysql.connector
 login_info = mysql.connector.connect(user="lifechoices", password="@Lifechoices1234", host="127.0.0.1", database="LS_login",
                                auth_plugin="mysql_native_password")
 
-mycursor = login_info.cursor()
-xy = mycursor.execute("Select * from login_info")
+mycursor = login_info.cursor(buffered=True)
+# xy = mycursor.execute("Select*from login_info")
 
 def register():
+    user_id = IntVar()
     global login_info
-    sql = "INSERT INTO login_info VALUES(%s, %s, %s, %s, %s, %s, %s, %s)"
-    val = (nameentry.get(), entrysurname.get(), IDentry.get(), entryPno.get(), NOKNameentry.get(), entryNOKPno.get(), userentry.get(), entryuserpass.get())
+    nok_query = "INSERT INTO next_kin(name, phone_number) VALUES(%s, %s);"
+    value= (NOKNameentry.get(), entryNOKPno.get())
+    mycursor.execute(nok_query, value)
+    login_info.commit()
+
+    select_nok = "SELECT user_id FROM next_kin"
+    mycursor.execute(select_nok)
+
+    for i in mycursor:
+        print(i[0])
+        user_id = i[0]
+
+    sql = "INSERT INTO login_info(name, surname, ID_number, phone_number, username, password, user_id) VALUES(%s, %s, %s, %s, %s, %s, %s)"
+    val = (nameentry.get(), entrysurname.get(), IDentry.get(), entryPno.get(), userentry.get(), entryuserpass.get(), user_id)
     mycursor.execute(sql, val)
     login_info.commit()
-    print(mycursor.rowcount, "record installed")
-    import pdb;pdb.set_trace()
+
     mycursor.execute("Select * from login_info")
     for i in mycursor:
         print(i)
-    import main
+    # import main
+
 
 def clear_entry():
     pass
