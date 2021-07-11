@@ -24,7 +24,27 @@ def delete_user():
 
 
 def make_admin():
-    pass
+    mycursor.execute("SELECT name, username, password from login_info WHERE name='" + userentry.get() + "'")
+    val = mycursor.fetchall()
+    tpt = ""
+    for i in val:
+        tpt = i
+    print("INSERT INTO Admin_login(name, username, password) VALUES("+tpt[0] + ", " + tpt[1]+", " + tpt[2]+")")
+    mycursor.execute("INSERT INTO Admin_login(name, username, password) VALUES('" + tpt[0] + "', '" + tpt[1]+"', '"
+                     + tpt[2]
+                     + "')")
+    login_info.commit()
+    messagebox.showinfo("successful", "you have successfully a user")
+
+
+def log_count():
+    mycursor.execute("SELECT * FROM login_info WHERE login_time is not NULL")
+    count_login = len(mycursor.fetchall())
+    mycursor.execute("SELECT * FROM login_info WHERE logout_time is not NULL")
+    count_logout = len(mycursor.fetchall())
+    messagebox.showinfo("Login's", " The number of people logged in is: " + str(count_login) +
+                        " and The number of people logged out is: " + str(count_logout))
+
 
 
 root = Tk()
@@ -50,6 +70,9 @@ cal_btn.grid(row=5, column=1, pady=5)
 
 reg_btn = Button(frame, text='Delete User', bg='#8dc63f', command=delete_user, borderwidth=5, width=10)
 reg_btn.grid(row=6, column=1, pady=5)
+
+count_btn = Button(frame, text="Log Count", bg='#8dc63f', command=log_count, borderwidth=5, width=10)
+count_btn.grid(row=6, column=2, pady=5)
 
 
 root.mainloop()

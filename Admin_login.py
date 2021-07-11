@@ -56,6 +56,7 @@ def verify():
     print(" ")
     if x == 1:
         root.destroy()
+        import add_delete_users
 
     elif x == 0:
         messagebox.showinfo("Alert", "Incorrect password ")

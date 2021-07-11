@@ -33,7 +33,7 @@ def register():
     mycursor.execute("Select * from login_info")
     for i in mycursor:
         print(i)
-    # import main
+    import main
 
 
 def exitapplication():
